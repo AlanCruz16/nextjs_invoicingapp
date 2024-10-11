@@ -1,13 +1,35 @@
+"use client"
+
+import { SyntheticEvent, useState, startTransition } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { CreateAction } from "@/app/actions";
+import SubmitButton from "@/components/ui/SubmitButton"
 
 
 
 
-export default async function Home() {
+
+export default function Home() {
+
+    const [state, setState] = useState("ready");
+
+    // async function handleOnSubmit(event: SyntheticEvent) {
+    //     event.preventDefault();
+    //     if (state === "submitting") {
+    //         return;
+    //     }
+    //     setState("submitting");
+    //     const target = event.target as HTMLFormElement;
+
+    //     startTransition(async () => {
+    //         const formData = new FormData(target);
+    //         await CreateAction(formData);
+
+    //     });
+    // }
 
 
     return (
@@ -34,7 +56,7 @@ export default async function Home() {
                     <Textarea id="description" name="description"></Textarea>
                 </div>
                 <div>
-                    <Button type="submit" className="w-full font-semibold">Create Invoice</Button>
+                    <SubmitButton />
                 </div>
             </form>
 
