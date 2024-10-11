@@ -11,10 +11,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { CirclePlus } from 'lucide-react';
 import Link from "next/link";
+import { db } from "@/db";
+import { Invoices } from "@/db/schema";
 
 
 
-export default function Home() {
+
+export default async function Home() {
+    const results = await db.select().from(Invoices);
+
     return (
         <main className="flex flex-col justify-center h-full text-center gap-6 max-w-5xl mx-auto my-12">
             <div className="flex justify-between">
@@ -50,31 +55,38 @@ export default function Home() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium text-left p-4">
-                            <span className="font-semibold">
-                                10/08/2024
-                            </span>
-                        </TableCell>
-                        <TableCell className="text-left p-4">
-                            <span className="font-semibold">
-                                Phillip Fry
-                            </span>
-                        </TableCell>
-                        <TableCell className="text-left p-4">
-                            <span>
-                                Fry@globalexpress.com
-                            </span>
-                        </TableCell>
-                        <TableCell className="text-center p-4">
-                            <Badge className="rounded-full">Open</Badge>
-                        </TableCell>
-                        <TableCell className="text-right p-4">
-                            <span className="font-semibold">
-                                $250.00
-                            </span>
-                        </TableCell>
-                    </TableRow>
+                    {results.map(result => {
+                        return (
+                            <TableRow key={result.id}>
+                                <TableCell className="p-0 font-medium text-left ">
+                                    <Link href={`/invoices/${result.id}`} className="block p-4 font-semibold">
+                                        {new Date(result.createTS).toLocaleDateString()}
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="p-0 text-left ">
+                                    <Link href={`/invoices/${result.id}`} className="block p-4 font-semibold">
+                                        Phillip Fry
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="p-0 text-left ">
+                                    <Link href={`/invoices/${result.id}`} className="block p-4">
+                                        Fry@globalexpress.com
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="p-0 text-center ">
+                                    <Link href={`/invoices/${result.id}`} className="block p-4">
+                                        <Badge className="rounded-full">{result.status}</Badge>
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="p-0 text-right ">
+                                    <Link href={`/invoices/${result.id}`} className="block p-4 font-semibold">
+                                        ${(result.value / 100).toFixed(2)}
+                                    </Link>
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
+
                 </TableBody>
             </Table>
 
